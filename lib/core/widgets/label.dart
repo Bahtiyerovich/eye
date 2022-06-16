@@ -1,6 +1,7 @@
 import 'package:animauth/core/compo/input_comp.dart';
 import 'package:animauth/core/const/constants.dart';
 import 'package:animauth/core/extention/context.dart';
+import 'package:animauth/core/widgets/mytext.dart';
 import 'package:flutter/material.dart';
 
 class EyeWidget extends StatefulWidget {
@@ -72,7 +73,6 @@ class _EyeWidgetState extends State<EyeWidget> {
             },
           ),
         ),
-        // const SizedBox(height: 20),
         Padding(
           padding: EdgeInsets.all(context.h * 0.025),
           child: TextFormField(
@@ -94,6 +94,29 @@ class _EyeWidgetState extends State<EyeWidget> {
             ),
           ),
         ),
+        Padding(
+            padding: EdgeInsets.only(
+            left: context.w * 0.16),
+            child: Row(
+              children: [
+                MyText(
+                    text: 'Forgot?',
+                    size: FontConst.kMediumFont,
+                    color: Colors.black),
+                SizedBox(width: context.w * 0.15),
+                MyText(
+                    text: 'SignUp',
+                    size: FontConst.kMediumFont,
+                    color: Colors.black),
+                SizedBox(width: context.w * 0.15),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: MyText(
+                    text: 'Login',
+                  ),
+                ),
+              ],
+            )),
       ])),
     );
   }
