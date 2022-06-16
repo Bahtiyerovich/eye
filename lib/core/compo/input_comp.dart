@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class InputComp {
   static inputDecoration({
-     String? hintText,
-     IconButton? suffixIcon,
+    String? hintText,
+    IconButton? suffixIcon,
   }) =>
       InputDecoration(
         border: OutlineInputBorder(

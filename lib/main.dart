@@ -1,4 +1,5 @@
 
+import 'package:animauth/core/compo/theme.dart';
 import 'package:animauth/core/router/router.dart';
 import 'package:flutter/material.dart';
 
@@ -14,9 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeComp.materialTheme,
       onGenerateRoute: Routes.instantce.onGeneralRoute,
       initialRoute: '/authin',
     );

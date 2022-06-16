@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:animauth/core/compo/input_comp.dart';
 import 'package:animauth/core/const/constants.dart';
 import 'package:animauth/core/extention/context.dart';
 import 'package:flutter/material.dart';
@@ -12,43 +11,90 @@ class EyeWidget extends StatefulWidget {
 }
 
 class _EyeWidgetState extends State<EyeWidget> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _phoneController =
+      TextEditingController(text: '+998 ');
+  final TextEditingController _confirmController = TextEditingController();
+
+  bool isHidden = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConst.bgColor,
-      body: Stack(children: [
-        Positioned(
-          top: context.h * 0.1,
-          child: CustomPaint(
-            size: const Size(400, 400),
-            painter: ArcPainter(),
-
-            // child: Container(
+      body: SingleChildScrollView(
+          child: Column(children: [
+        SizedBox(
+          height: context.h * 0.43,
+          child: Stack(
+            children: [
+              Positioned(
+                top: context.h * 0.1,
+                child: CustomPaint(
+                  size: const Size(400, 400),
+                  painter: ArcPainter(),
+                ),
+              ),
+              Positioned(
+                top: context.h * 0.12,
+                left: context.w * 0.35,
+                child: const CircleAvatar(
+                  backgroundColor: Colors.black87,
+                  radius: 60,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black,
+                    radius: 45,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: context.h * 0.25,
+                left: context.w * 0.13,
+                child: CustomPaint(
+                  size: const Size(300, 300),
+                  painter: SmilePainter(),
+                ),
+              ),
+            ],
           ),
         ),
-        Positioned(
-          top: context.h * 0.12,
-          left: context.w * 0.35,
-          child: CircleAvatar(
-            backgroundColor: Colors.black87,
-            radius: 60,
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 50,
+        Padding(
+          padding: EdgeInsets.all(context.h * 0.025),
+          child: TextFormField(
+            controller: _phoneController,
+            keyboardType: TextInputType.number,
+            decoration: InputComp.inputDecoration(),
+            cursorColor: Colors.white,
+            validator: (text) {
+              if (text!.length != 19) {
+                return "Number  must be +998(XX) XXX-XX-XX !";
+              }
+              return null;
+            },
+          ),
+        ),
+        // const SizedBox(height: 20),
+        Padding(
+          padding: EdgeInsets.all(context.h * 0.025),
+          child: TextFormField(
+            obscureText: !isHidden,
+            controller: _confirmController,
+            cursorColor: Colors.white,
+            decoration: InputComp.inputDecoration(
+              hintText: "Password",
+              suffixIcon: IconButton(
+                splashRadius: 20.0,
+                icon: Icon(isHidden
+                    ? Icons.remove_red_eye_rounded
+                    : Icons.remove_red_eye_outlined),
+                onPressed: () {
+                  isHidden = !isHidden;
+                  setState(() {});
+                },
+              ),
             ),
           ),
         ),
-        Positioned(
-          top: context.h * 0.25,
-          left: context.w * 0.13,
-          child: CustomPaint(
-            size: const Size(300, 300),
-            painter: SmilePainter(),
-
-            // child: Container(
-          ),
-        ),
-      ]),
+      ])),
     );
   }
 }
