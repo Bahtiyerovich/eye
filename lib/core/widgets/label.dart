@@ -4,6 +4,7 @@ import 'package:animauth/core/extention/context.dart';
 import 'package:animauth/core/widgets/mytext.dart';
 import 'package:flutter/material.dart';
 
+
 class EyeWidget extends StatefulWidget {
   const EyeWidget({Key? key}) : super(key: key);
 
@@ -11,114 +12,196 @@ class EyeWidget extends StatefulWidget {
   State<EyeWidget> createState() => _EyeWidgetState();
 }
 
-class _EyeWidgetState extends State<EyeWidget> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _phoneController =
-      TextEditingController(text: '+998 ');
-  final TextEditingController _confirmController = TextEditingController();
+class _EyeWidgetState extends State<EyeWidget> with TickerProviderStateMixin {
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
 
   bool isHidden = false;
+
+  AnimationController? animationController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = AnimationController(
+      vsync: this,
+      // lowerBound: 101,
+      // upperBound: 145,
+      lowerBound: 123,
+      upperBound: 123.1,
+      duration: const Duration(microseconds: 1),
+    );
+
+    animationController!.forward();
+
+    animationController!.addListener(() {
+      setState(() {});
+    });
+
+    animationController!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animationController!.reverse();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConst.bgColor,
       body: SingleChildScrollView(
-          child: Column(children: [
-        SizedBox(
-          height: context.h * 0.43,
-          child: Stack(
-            children: [
-              Positioned(
-                top: context.h * 0.1,
-                child: CustomPaint(
-                  size: const Size(400, 400),
-                  painter: ArcPainter(),
-                ),
-              ),
-              Positioned(
-                top: context.h * 0.12,
-                left: context.w * 0.35,
-                child: const CircleAvatar(
-                  backgroundColor: Colors.black87,
-                  radius: 60,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.black,
-                    radius: 45,
+        child: Column(
+          children: [
+            SizedBox(
+              height: context.h * 0.43,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: context.h * 0.16),
+                      child: CustomPaint(
+                        size: const Size(400, 400),
+                        painter: ArcPainter(),
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: animationController!.value,
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.black87,
+                      radius: 60,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 45,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: context.h * 0.25,
+                    left: context.w * 0.13,
+                    child: CustomPaint(
+                      size: const Size(300, 300),
+                      painter: SmilePainter(),
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                top: context.h * 0.25,
-                left: context.w * 0.13,
-                child: CustomPaint(
-                  size: const Size(300, 300),
-                  painter: SmilePainter(),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(context.h * 0.025),
-          child: TextFormField(
-            controller: _phoneController,
-            keyboardType: TextInputType.number,
-            decoration: InputComp.inputDecoration(),
-            cursorColor: Colors.white,
-            validator: (text) {
-              if (text!.length != 19) {
-                return "Number  must be +998(XX) XXX-XX-XX !";
-              }
-              return null;
-            },
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(context.h * 0.025),
-          child: TextFormField(
-            obscureText: !isHidden,
-            controller: _confirmController,
-            cursorColor: Colors.white,
-            decoration: InputComp.inputDecoration(
-              hintText: "Password",
-              suffixIcon: IconButton(
-                splashRadius: 20.0,
-                icon: Icon(isHidden
-                    ? Icons.remove_red_eye_rounded
-                    : Icons.remove_red_eye_outlined),
-                onPressed: () {
-                  isHidden = !isHidden;
-                  setState(() {});
+            ),
+            Padding(
+              padding: EdgeInsets.all(context.h * 0.025),
+              child: TextFormField(
+                controller: _phoneController,
+                keyboardType: TextInputType.number,
+                decoration: InputComp.inputDecoration(hintText: "Login"),
+                cursorColor: Colors.white,
+                onTap: pastkaQarash,
+                validator: (t) {
+                  if (t!.length != 19) {
+                    return "Number  must be +998(XX) XXX-XX-XX !";
+                  }
+                  return null;
                 },
               ),
             ),
-          ),
-        ),
-        Padding(
-            padding: EdgeInsets.only(
-            left: context.w * 0.16),
-            child: Row(
-              children: [
-                MyText(
-                    text: 'Forgot?',
-                    size: FontConst.kMediumFont,
-                    color: Colors.black),
-                SizedBox(width: context.w * 0.15),
-                MyText(
-                    text: 'SignUp',
-                    size: FontConst.kMediumFont,
-                    color: Colors.black),
-                SizedBox(width: context.w * 0.15),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: MyText(
-                    text: 'Login',
+            Padding(
+              padding: EdgeInsets.all(context.h * 0.025),
+              child: TextFormField(
+                obscureText: !isHidden,
+                controller: _passController,
+                cursorColor: Colors.white,
+                decoration: InputComp.inputDecoration(
+                  hintText: "Password",
+                  suffixIcon: IconButton(
+                    splashRadius: 20.0,
+                    icon: Icon(isHidden
+                        ? Icons.remove_red_eye_rounded
+                        : Icons.remove_red_eye_outlined),
+                    onPressed: () {
+                      isHidden = !isHidden;
+                      setState(() {});
+                    },
                   ),
                 ),
-              ],
-            )),
-      ])),
+                onTap: tepagaQarash,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: context.w * 0.16),
+              child: Row(
+                children: [
+                  MyText(
+                    text: 'Forgot?',
+                    size: FontConst.kMediumFont,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: context.w * 0.15),
+                  MyText(
+                    text: 'SignUp',
+                    size: FontConst.kMediumFont,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: context.w * 0.15),
+                  ElevatedButton(
+                    child: MyText(text: 'Login'),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
+  }
+
+  tepagaQarash() {
+    setState(() {
+      if (animationController!.value <= 102) {
+        animationController!.dispose();
+      } else {
+        animationController = AnimationController(
+          vsync: this,
+          lowerBound: 101,
+          upperBound: animationController!.value,
+          duration: const Duration(milliseconds: 500),
+        );
+        animationController!.forward();
+        animationController!.addListener(() {
+          setState(() {});
+        });
+        animationController!.addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            animationController!.reverse();
+          }
+        });
+      }
+    });
+  }
+
+  pastkaQarash() {
+    setState(() {
+      if (animationController!.value == 145) {
+        animationController!.dispose();
+      } else {
+        animationController = AnimationController(
+          vsync: this,
+          lowerBound: animationController!.value,
+          upperBound: 145,
+          duration: const Duration(milliseconds: 500),
+        );
+        animationController!.forward();
+        animationController!.addListener(() {
+          setState(() {});
+        });
+        animationController!.addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            setState(() {});
+          }
+        });
+      }
+    });
   }
 }
 
@@ -182,3 +265,9 @@ class SmilePainter extends CustomPainter {
     return false;
   }
 }
+// animationController!.repeat();
+// animationController!.reset();
+// animationController!.reverse();
+// animationController!.forward();
+
+
